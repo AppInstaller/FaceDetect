@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>FaceAnalysis_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>BEE89486837B8C39ED69C9F392D542C5BC2CC38A</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>70B59B1DBE4A563DC59A4097A3AB1419E2E12C0B</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -117,7 +117,6 @@
     <Content Include="Assets\storelogo-sdk.png" />
     <Content Include="Assets\tile-sdk.png" />
     <Content Include="Assets\windows-sdk.png" />
-    <Content Include="filter\glasses.png" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -136,10 +135,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FaceAnalysis_TemporaryKey.pfx" />
+    <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Styles\" />
+    <None Include="FaceAnalysis_TemporaryKey.pfx" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

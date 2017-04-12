@@ -125,14 +125,14 @@ namespace PhotoEditor
                         glasses.Width = (uint)(face.FaceBox.Width / widthScale);
                         glasses.Height = (uint)(face.FaceBox.Height / heightScale);
 
-                        string filterImage = string.Empty;
+                        string filterImage = filter;
 
-                        switch (filter)
-                        {
-                            case "glasses":
-                                filterImage = "filter\\glasses.png";
-                                break;
-                        }
+                        //switch (filter)
+                        //{
+                        //    case "glasses":
+                        //        filterImage = "filter\\glasses.png";
+                        //        break;
+                        //}
 
 
                         BitmapImage bit = new BitmapImage(new Uri(this.BaseUri, filterImage));
@@ -342,10 +342,20 @@ namespace PhotoEditor
             }
         }
 
-        private void AddFilter_Click(object sender, RoutedEventArgs e)
+        private async void AddFilter_Click(object sender, RoutedEventArgs e)
         {
-            // Create our display using the available image and face results.
-            this.SetupVisualization(displaySource, faces, "glasses");
+            var currentAppPackage = Windows.ApplicationModel.Package.Current;
+            foreach(var package in currentAppPackage.Dependencies)
+            {
+                if(package.IsOptional && package.Id.FamilyName.Contains("FabrikamFaceFilters"))
+                {
+                    StorageFolder installFolder = package.InstalledLocation;
+                    StorageFolder content = await installFolder.GetFolderAsync("Content");
+                    StorageFile file = await content.GetFileAsync("glasses.png");
+                    this.SetupVisualization(displaySource, faces, file.Path);
+                }
+            }         
+            
 
         }
 

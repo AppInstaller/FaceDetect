@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{15195583-7e99-4f0e-b15f-4e37c06def87}</ProjectGuid>
-    <RootNamespace>OptionalPackage</RootNamespace>
+    <ProjectGuid>{1c0199ca-1a35-460b-848a-a1e50227f5a1}</ProjectGuid>
+    <RootNamespace>ActivatableOptionalPackage1</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -10,6 +10,8 @@
     <WindowsTargetPlatformVersion>10.0.15058.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.15058.0</WindowsTargetPlatformMinVersion>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+    <XamlResourceMapName>29270depappf.ActivatableOptional1</XamlResourceMapName>
+    <XamlComponentResourceLocation>Application</XamlComponentResourceLocation>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <ItemGroup Label="ProjectConfigurations">
@@ -97,11 +99,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <PackageCertificateKeyFile>MyMainApp_StoreKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <PackageCertificateKeyFile>ActivatableOptionalPackage1_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>245D0E6BCF335DCB6E3EE38DA2A00623F29A5078</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>4434DAF09CAB31F4DF55A2CB451F535D1E5BFEB9</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
@@ -160,6 +162,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="ActivatableOptionalPackage1_StoreKey.pfx" />
+    <None Include="ActivatableOptionalPackage1_TemporaryKey.pfx" />
+    <None Include="ms.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png" />
@@ -187,10 +192,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Content\SampleDLCFile.txt" />
+    <ProjectReference Include="..\OptionalPackageDLL\OptionalPackageDLL.vcxproj">
+      <Project>{5887cd9c-428e-4151-914b-14b7ed6e0301}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MyMainApp_StoreKey.pfx" />
+    <Text Include="Content\SampleDLCFile.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

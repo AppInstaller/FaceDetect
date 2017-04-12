@@ -2,14 +2,14 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Common">
-      <UniqueIdentifier>15195583-7e99-4f0e-b15f-4e37c06def87</UniqueIdentifier>
+      <UniqueIdentifier>1c0199ca-1a35-460b-848a-a1e50227f5a1</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets">
-      <UniqueIdentifier>21db765c-f406-4766-abc3-759b3df39597</UniqueIdentifier>
+      <UniqueIdentifier>511ecd0b-01e8-4b42-85ed-e6b5462835f4</UniqueIdentifier>
       <Extensions>bmp;fbx;gif;jpg;jpeg;tga;tiff;tif;png</Extensions>
     </Filter>
     <Filter Include="Content">
-      <UniqueIdentifier>{f360c84d-60a6-4b2c-9884-585bf4f81bcc}</UniqueIdentifier>
+      <UniqueIdentifier>{a6afdd00-d120-4f9c-95d0-399c0b94b6e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,14 +52,16 @@
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ActivatableOptionalPackage1_TemporaryKey.pfx" />
+    <None Include="ActivatableOptionalPackage1_StoreKey.pfx" />
+    <None Include="ms.pfx" />
+  </ItemGroup>
+  <ItemGroup>
     <Page Include="MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\SampleDLCFile.txt">
       <Filter>Content</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MyMainApp_StoreKey.pfx" />
   </ItemGroup>
 </Project>
