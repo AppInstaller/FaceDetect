@@ -37,6 +37,9 @@ namespace PhotoEditor
         /// </summary>
         private readonly SolidColorBrush lineBrush = new SolidColorBrush(Windows.UI.Colors.Yellow);
 
+        private IList<DetectedFace> faces = null;
+        private WriteableBitmap displaySource = null;
+
         /// <summary>
         /// Thickness of the face bounding box lines.
         /// </summary>
@@ -86,7 +89,7 @@ namespace PhotoEditor
         /// </summary>
         /// <param name="displaySource">Bitmap object holding the image we're going to display</param>
         /// <param name="foundFaces">List of detected faces; output from FaceDetector</param>
-        private async void SetupVisualization(WriteableBitmap displaySource, IList<DetectedFace> foundFaces)
+        private async void SetupVisualization(WriteableBitmap displaySource, IList<DetectedFace> foundFaces, string filter = null, bool AnalyzeAge = false)
         {
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = displaySource;
@@ -116,24 +119,36 @@ namespace PhotoEditor
                     box.Margin = new Thickness((uint)(face.FaceBox.X / widthScale), (uint)(face.FaceBox.Y / heightScale), 0, 0);
                     this.PhotoCanvas.Children.Add(box);
 
-                    Rectangle glasses = new Rectangle();
-                    //box.Tag = face.FaceBox;
-                    glasses.Width = (uint)(face.FaceBox.Width / widthScale);
-                    glasses.Height = (uint)(face.FaceBox.Height / heightScale);
-                    BitmapImage bit = new BitmapImage(new Uri(this.BaseUri, "glasses.png"));
-                    ImageBrush pic = new ImageBrush();
-                    pic.Stretch = Stretch.Fill;
-                    pic.ImageSource = bit;
-                    //glasses.Fill = new SolidColorBrush(Windows.UI.Colors.Black);
-                    glasses.Fill = pic;
-                    glasses.Margin = new Thickness((uint)(face.FaceBox.X / widthScale), (uint)(face.FaceBox.Y / heightScale), 0, 0);
-                    this.PhotoCanvas.Children.Add(glasses);
+                    if (filter != null)
+                    {
+                        Rectangle glasses = new Rectangle();
+                        glasses.Width = (uint)(face.FaceBox.Width / widthScale);
+                        glasses.Height = (uint)(face.FaceBox.Height / heightScale);
+
+                        string filterImage = string.Empty;
+
+                        switch (filter)
+                        {
+                            case "glasses":
+                                filterImage = "filter\\glasses.png";
+                                break;
+                        }
+
+
+                        BitmapImage bit = new BitmapImage(new Uri(this.BaseUri, filterImage));
+                        ImageBrush pic = new ImageBrush();
+                        pic.Stretch = Stretch.Fill;
+                        pic.ImageSource = bit;
+                        glasses.Fill = pic;
+                        glasses.Margin = new Thickness((uint)(face.FaceBox.X / widthScale), (uint)(face.FaceBox.Y / heightScale), 0, 0);
+                        this.PhotoCanvas.Children.Add(glasses);
+                    }
 
 
                     // If optional package is installed
-                    if (AgeAnalysis)
+                    if (AnalyzeAge)
                     {
-                        var age = GetAge(face);                        
+                        var age = GetAge(face);
                         TextBlock text = new TextBlock();
                         text.Text = age.ToString();
                         text.FontFamily = new FontFamily("Verdana");
@@ -167,8 +182,8 @@ namespace PhotoEditor
         }
 
         private int GetAge(DetectedFace face)
-        {            
-            int rInt = rand.Next(2 , 85); //for ints            
+        {
+            int rInt = rand.Next(2, 85); //for ints            
             return rInt;
         }
 
@@ -177,9 +192,12 @@ namespace PhotoEditor
         /// <summary>
         /// Clears the display of image and face boxes.
         /// </summary>
-        private void ClearVisualization()
+        private void ClearVisualization(bool ClearImage = true)
         {
-            this.PhotoCanvas.Background = null;
+            if (ClearImage)
+            {
+                this.PhotoCanvas.Background = null;
+            }
             this.PhotoCanvas.Children.Clear();
             //this.rootPage.NotifyUser(string.Empty, NotifyType.StatusMessage);
         }
@@ -215,9 +233,7 @@ namespace PhotoEditor
         /// <param name="e">Event data</param>
         private async void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            IList<DetectedFace> faces = null;
             SoftwareBitmap detectorInput = null;
-            WriteableBitmap displaySource = null;
 
             try
             {
@@ -255,7 +271,7 @@ namespace PhotoEditor
                             using (detectorInput = SoftwareBitmap.Convert(originalBitmap, InputPixelFormat))
                             {
                                 // Create a WritableBitmap for our visualization display; copy the original bitmap pixels to wb's buffer.
-                                displaySource = new WriteableBitmap(originalBitmap.PixelWidth, originalBitmap.PixelHeight);
+                                this.displaySource = new WriteableBitmap(originalBitmap.PixelWidth, originalBitmap.PixelHeight);
                                 originalBitmap.CopyToBuffer(displaySource.PixelBuffer);
 
                                 //this.rootPage.NotifyUser("Detecting...", NotifyType.StatusMessage);
@@ -265,7 +281,7 @@ namespace PhotoEditor
                                 // you should create a member variable and reuse the object.
                                 // However, for simplicity in this scenario we instantiate a new instance each time.
                                 FaceDetector detector = await FaceDetector.CreateAsync();
-                                faces = await detector.DetectFacesAsync(detectorInput);
+                                this.faces = await detector.DetectFacesAsync(detectorInput);
 
                                 // Create our display using the available image and face results.
                                 this.SetupVisualization(displaySource, faces);
@@ -324,6 +340,24 @@ namespace PhotoEditor
             {
                 //this.rootPage.NotifyUser(ex.ToString(), NotifyType.ErrorMessage);
             }
+        }
+
+        private void AddFilter_Click(object sender, RoutedEventArgs e)
+        {
+            // Create our display using the available image and face results.
+            this.SetupVisualization(displaySource, faces, "glasses");
+
+        }
+
+        private void GuessAge_Click(object sender, RoutedEventArgs e)
+        {
+            this.ClearVisualization();
+            this.SetupVisualization(displaySource, faces, null, true);
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            this.ClearVisualization(false);
         }
     }
 }
