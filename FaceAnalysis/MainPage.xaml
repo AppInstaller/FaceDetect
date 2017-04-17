@@ -21,7 +21,7 @@
                     Identifies human faces within an image file and visualizes the results by drawing a box around each detected face. Click the button to select an image file to open (.jpg, .bmp, .png).
                     The image along with any detected faces will be displayed.
                 </TextBlock>
-                <Button Name="AddFilter"  Content="AddFilter" Click="AddFilter_Click"/>
+                <Button Name="AddFilterCDON"  Content="AddFilter" Click="AddFilter_Click"/>
                 <Button Name="GuessAge" Content="GuessAge" Click="GuessAge_Click"/>
                 <Button Name="Clear" Content="Clear" Click="Clear_Click"/>
             </StackPanel>
