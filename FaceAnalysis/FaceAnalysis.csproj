@@ -107,6 +107,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\cDonIn.png" />
     <Content Include="Assets\microsoft-sdk.png" />
     <Content Include="Assets\placeholder-sdk.png" />
     <Content Include="Assets\placeholder.png" />

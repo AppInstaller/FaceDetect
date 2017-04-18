@@ -10,36 +10,42 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid x:Name="RootGrid" Margin="12,20,12,12">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <StackPanel Margin="0,0,0,10">
-                <TextBlock Text="Description:" />
-                <TextBlock TextWrapping="Wrap">
-                    Identifies human faces within an image file and visualizes the results by drawing a box around each detected face. Click the button to select an image file to open (.jpg, .bmp, .png).
-                    The image along with any detected faces will be displayed.
-                </TextBlock>
-                <Button Name="AddFilterCDON"  Content="AddFilter" Click="AddFilter_Click"/>
-                <Button Name="GuessAge" Content="GuessAge" Click="GuessAge_Click"/>
-                <Button Name="Clear" Content="Clear" Click="Clear_Click"/>
-            </StackPanel>
-
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Button Name="OpenFile" Grid.Row="0" Grid.Column="0" Content="Open image file" Click="OpenFile_Click"/>
-                <Canvas Name="PhotoCanvas" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" SizeChanged="PhotoCanvas_SizeChanged"/>
-            </Grid>
-
-            <!-- Status Block for providing messages to the user.  Use the
-             NotifyUser() method to populate the message -->
-            <Border x:Name="ErrorBorder" Background="Red" Grid.Row="2"/>
-            <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>
+        
+        <TextBlock Text="Description:" Grid.Row="0" Grid.Column="4"/>
+            <TextBlock TextWrapping="Wrap" Grid.Row="1" Grid.RowSpan="2" Grid.Column="4">
+            Identifies human faces within an image file and visualizes the results by drawing a box around each detected face. Click the button to select an image file to open (.jpg, .bmp, .png).
+            The image along with any detected faces will be displayed.
+        </TextBlock>
+        <Button Name="AddFilter"  Content="Add filter" Click="AddFilter_Click" Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" />
+        <Button Name="GuessAge" Content="Guess age" Click="GuessAge_Click" Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center"/>
+        <Button Name="Clear" Content="Clear filters" Click="Clear_Click" Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center"/>
+            
+        <Button Name="OpenFile" Content="Open image file" HorizontalAlignment="Center" Click="OpenFile_Click" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"/>
+            <Canvas Name="PhotoCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" SizeChanged="PhotoCanvas_SizeChanged" Grid.Row="1" Grid.RowSpan="5" Grid.Column="0" Grid.ColumnSpan="4">
+                
+            </Canvas>
+                
+        
+        <!-- Status Block for providing messages to the user.  Use the
+            NotifyUser() method to populate the message -->
+        <Border x:Name="ErrorBorder" Background="Red" Grid.Row="6"/>
+        <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>
         </Grid>
     </Grid>
 </Page>
