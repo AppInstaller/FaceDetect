@@ -7,8 +7,8 @@
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
-    <WindowsTargetPlatformVersion>10.0.15058.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformMinVersion>10.0.15058.0</WindowsTargetPlatformMinVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.15063.0</WindowsTargetPlatformMinVersion>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
     <XamlResourceMapName>29270depappf.ActivatableOptional1</XamlResourceMapName>
     <XamlComponentResourceLocation>Application</XamlComponentResourceLocation>
@@ -99,8 +99,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <PackageCertificateKeyFile>ActivatableOptionalPackage1_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>245D0E6BCF335DCB6E3EE38DA2A00623F29A5078</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>FaceAnalysis_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>70B59B1DBE4A563DC59A4097A3AB1419E2E12C0B</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
@@ -162,8 +162,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="ActivatableOptionalPackage1_StoreKey.pfx" />
-    <None Include="ActivatableOptionalPackage1_TemporaryKey.pfx" />
+    <None Include="FaceAnalysis_TemporaryKey.pfx" />
     <None Include="ms.pfx" />
   </ItemGroup>
   <ItemGroup>

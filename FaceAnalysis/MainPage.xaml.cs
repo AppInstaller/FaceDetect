@@ -11,7 +11,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Runtime.InteropServices;
 using Windows.Graphics.Imaging;
 using Windows.Media.FaceAnalysis;
 using Windows.Storage;
@@ -39,6 +39,9 @@ namespace PhotoEditor
 
         private IList<DetectedFace> faces = null;
         private WriteableBitmap displaySource = null;
+
+        private const string OPT_PKG_LIB_FILE = @"OptionalPackageDLL.dll";
+        private const string OPT_PKG_LIB_GETAGE_EXPORT = "GetAge";
 
         /// <summary>
         /// Thickness of the face bounding box lines.
@@ -124,18 +127,8 @@ namespace PhotoEditor
                         Rectangle glasses = new Rectangle();
                         glasses.Width = (uint)(face.FaceBox.Width / widthScale);
                         glasses.Height = (uint)(face.FaceBox.Height / heightScale);
-
-                        string filterImage = filter;
-
-                        //switch (filter)
-                        //{
-                        //    case "glasses":
-                        //        filterImage = "filter\\glasses.png";
-                        //        break;
-                        //}
-
-
-                        BitmapImage bit = new BitmapImage(new Uri(this.BaseUri, filterImage));
+                        
+                        BitmapImage bit = new BitmapImage(new Uri(this.BaseUri, filter));
                         ImageBrush pic = new ImageBrush();
                         pic.Stretch = Stretch.Fill;
                         pic.ImageSource = bit;
@@ -148,9 +141,9 @@ namespace PhotoEditor
                     // If optional package is installed
                     if (AnalyzeAge)
                     {
-                        var age = GetAge(face);
+                        //var age = GetAge(face);
                         TextBlock text = new TextBlock();
-                        text.Text = age.ToString();
+                        text.Text = CalculateAge().ToString();
                         text.FontFamily = new FontFamily("Verdana");
                         text.FontSize = 28;
                         text.Foreground = new SolidColorBrush(Windows.UI.Colors.Yellow);
@@ -359,11 +352,54 @@ namespace PhotoEditor
 
         }
 
+        delegate Int32 CodeDelegate();
+        private int CalculateAge()
+        {
+            Int32 age = 0;
+            var currentAppPackage = Windows.ApplicationModel.Package.Current;
+            foreach (var package in currentAppPackage.Dependencies)
+            {
+                if (package.IsOptional && package.Id.FamilyName.Contains("FabrikamAgeAnalysis"))
+                {
+                    try
+                    {
+                        IntPtr handle = LoadPackagedLibrary(OPT_PKG_LIB_FILE);
+
+                        if (handle == IntPtr.Zero)
+                        {
+                            //await new MessageDialog("Optional Package failed to load").ShowAsync();
+                        }
+                        else
+                        {
+                            IntPtr FuncPTR = GetProcAddress(handle, OPT_PKG_LIB_GETAGE_EXPORT);
+                            if (FuncPTR != IntPtr.Zero)
+                            {
+                                CodeDelegate function = Marshal.GetDelegateForFunctionPointer<CodeDelegate>(FuncPTR);
+                                age = function();                                
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+            return age;
+        }
         private void GuessAge_Click(object sender, RoutedEventArgs e)
         {
             this.ClearVisualization();
             this.SetupVisualization(displaySource, faces, null, true);
         }
+
+        #region Interop
+        [DllImport("kernel32", EntryPoint = "LoadPackagedLibrary", SetLastError = true)]
+        static extern IntPtr LoadPackagedLibrary([MarshalAs(UnmanagedType.LPWStr)] string lpFileName, int reserved = 0);
+
+        [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
+        static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+        #endregion
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
