@@ -327,8 +327,9 @@ namespace PhotoEditor
             }
         }
 
-        private async void AddFilter_Click(object sender, RoutedEventArgs e)
+        private async void AddGlasses_Click(object sender, RoutedEventArgs e)
         {
+            //check if optional package is installed first
             var currentAppPackage = Windows.ApplicationModel.Package.Current;
             foreach(var package in currentAppPackage.Dependencies)
             {
@@ -386,7 +387,7 @@ namespace PhotoEditor
                     }
                     catch (Exception ex)
                     {
-
+                        // Exception thrown while loading code
                     }
                 }
             }

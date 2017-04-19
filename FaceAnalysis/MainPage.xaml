@@ -15,16 +15,23 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Margin="0,0,0,10">
-                <TextBlock Text="Description:" />
-                <TextBlock TextWrapping="Wrap">
-                    Identifies human faces within an image file and visualizes the results by drawing a box around each detected face. Click the button to select an image file to open (.jpg, .bmp, .png).
-                    The image along with any detected faces will be displayed.
-                </TextBlock>
-                <Button Name="AddFilter"  Content="AddFilter" Click="AddFilter_Click"/>
-                <Button Name="AddMush"  Content="AddMush" Click="AddMush_Click"/>
-                <Button Name="GuessAge" Content="GuessAge" Click="GuessAge_Click"/>
-                <Button Name="Clear" Content="Clear" Click="Clear_Click"/>
+            <StackPanel Margin="0,0,0,10" HorizontalAlignment="Left">
+                <TextBlock>Filters</TextBlock>
+                <Button Name="AddFilter" Click="AddGlasses_Click">
+                    <StackPanel>
+                        <Image Source="Assets\glasses.png" MaxHeight="50" MaxWidth="100" Stretch="Fill"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="AddMush" Click="AddMush_Click">
+                    <StackPanel>
+                        <Image Source="Assets\moustache.png" MaxHeight="50" MaxWidth="100" Stretch="Fill"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,0,10" HorizontalAlignment="Right">
+                <TextBlock>Utilities</TextBlock>
+                <Button Name="GuessAge" Content="GuessAge" Click="GuessAge_Click" MaxHeight="50" MaxWidth="100" />
             </StackPanel>
 
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
@@ -34,6 +41,7 @@
                 </Grid.RowDefinitions>
 
                 <Button Name="OpenFile" Grid.Row="0" Grid.Column="0" Content="Open image file" Click="OpenFile_Click"/>
+                <Button Name="Clear" Content="Clear" Click="Clear_Click" MaxHeight="50" MaxWidth="100" Margin="272,0,0,0" />
                 <Canvas Name="PhotoCanvas" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" SizeChanged="PhotoCanvas_SizeChanged"/>
             </Grid>
 
