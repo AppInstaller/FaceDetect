@@ -30,8 +30,7 @@ namespace PhotoEditor
     /// Page for demonstrating FaceDetection on an image file.
     /// </summary>
     public sealed partial class MainPage : Page
-    {
-        private Random rand;
+    {        
         /// <summary>
         /// Brush for drawing the bounding box around each detected face.
         /// </summary>
@@ -75,7 +74,6 @@ namespace PhotoEditor
         public MainPage()
         {
             this.InitializeComponent();
-            rand = new Random();
         }
 
         /// <summary>
@@ -124,17 +122,17 @@ namespace PhotoEditor
 
                     if (filter != null)
                     {
-                        Rectangle glasses = new Rectangle();
-                        glasses.Width = (uint)(face.FaceBox.Width / widthScale);
-                        glasses.Height = (uint)(face.FaceBox.Height / heightScale);
+                        Rectangle filterPicture = new Rectangle();
+                        filterPicture.Width = (uint)(face.FaceBox.Width / widthScale);
+                        filterPicture.Height = (uint)(face.FaceBox.Height / heightScale);
                         
                         BitmapImage bit = new BitmapImage(new Uri(this.BaseUri, filter));
                         ImageBrush pic = new ImageBrush();
-                        pic.Stretch = Stretch.Fill;
+                        //pic.Stretch = Stretch.Fill;
                         pic.ImageSource = bit;
-                        glasses.Fill = pic;
-                        glasses.Margin = new Thickness((uint)(face.FaceBox.X / widthScale), (uint)(face.FaceBox.Y / heightScale), 0, 0);
-                        this.PhotoCanvas.Children.Add(glasses);
+                        filterPicture.Fill = pic;
+                        filterPicture.Margin = new Thickness((uint)(face.FaceBox.X / widthScale), (uint)(face.FaceBox.Y / heightScale), 0, 0);
+                        this.PhotoCanvas.Children.Add(filterPicture);
                     }
 
 
@@ -172,13 +170,7 @@ namespace PhotoEditor
             }
 
             //this.rootPage.NotifyUser(message, NotifyType.StatusMessage);
-        }
-
-        private int GetAge(DetectedFace face)
-        {
-            int rInt = rand.Next(2, 85); //for ints            
-            return rInt;
-        }
+        }     
 
 
 
@@ -347,9 +339,22 @@ namespace PhotoEditor
                     StorageFile file = await content.GetFileAsync("glasses.png");
                     this.SetupVisualization(displaySource, faces, file.Path);
                 }
-            }         
-            
+            }
+        }
 
+        private async void AddMush_Click(object sender, RoutedEventArgs e)
+        {
+            var currentAppPackage = Windows.ApplicationModel.Package.Current;
+            foreach (var package in currentAppPackage.Dependencies)
+            {
+                if (package.IsOptional && package.Id.FamilyName.Contains("FabrikamFaceFilters"))
+                {
+                    StorageFolder installFolder = package.InstalledLocation;
+                    StorageFolder content = await installFolder.GetFolderAsync("Content");
+                    StorageFile file = await content.GetFileAsync("moustache.png");
+                    this.SetupVisualization(displaySource, faces, file.Path);
+                }
+            }
         }
 
         delegate Int32 CodeDelegate();
@@ -367,7 +372,7 @@ namespace PhotoEditor
 
                         if (handle == IntPtr.Zero)
                         {
-                            //await new MessageDialog("Optional Package failed to load").ShowAsync();
+                            //Optional Package failed to load
                         }
                         else
                         {
@@ -387,11 +392,6 @@ namespace PhotoEditor
             }
             return age;
         }
-        private void GuessAge_Click(object sender, RoutedEventArgs e)
-        {
-            this.ClearVisualization();
-            this.SetupVisualization(displaySource, faces, null, true);
-        }
 
         #region Interop
         [DllImport("kernel32", EntryPoint = "LoadPackagedLibrary", SetLastError = true)]
@@ -400,6 +400,13 @@ namespace PhotoEditor
         [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
         #endregion
+        private void GuessAge_Click(object sender, RoutedEventArgs e)
+        {
+            this.ClearVisualization();
+            this.SetupVisualization(displaySource, faces, null, true);
+        }
+
+        
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {

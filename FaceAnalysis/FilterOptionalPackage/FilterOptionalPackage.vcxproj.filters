@@ -50,6 +50,9 @@
     <Image Include="Content\glasses.png">
       <Filter>Content</Filter>
     </Image>
+    <Image Include="Content\moustache.png">
+      <Filter>Content</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

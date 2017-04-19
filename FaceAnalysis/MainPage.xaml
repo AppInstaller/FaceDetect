@@ -22,6 +22,7 @@
                     The image along with any detected faces will be displayed.
                 </TextBlock>
                 <Button Name="AddFilter"  Content="AddFilter" Click="AddFilter_Click"/>
+                <Button Name="AddMush"  Content="AddMush" Click="AddMush_Click"/>
                 <Button Name="GuessAge" Content="GuessAge" Click="GuessAge_Click"/>
                 <Button Name="Clear" Content="Clear" Click="Clear_Click"/>
             </StackPanel>
