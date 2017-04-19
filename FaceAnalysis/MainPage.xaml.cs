@@ -31,6 +31,7 @@ namespace PhotoEditor
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
         private Random rand;
         /// <summary>
         /// Brush for drawing the bounding box around each detected face.
@@ -199,6 +200,7 @@ namespace PhotoEditor
                 this.PhotoCanvas.Background = null;
             }
             this.PhotoCanvas.Children.Clear();
+            this.BlankSpaceImage.Visibility = Visibility.Collapsed;
             //this.rootPage.NotifyUser(string.Empty, NotifyType.StatusMessage);
         }
 
@@ -250,6 +252,11 @@ namespace PhotoEditor
                 {
                     return;
                 }
+
+                //enable the button once an image is chosen
+                this.AddFilter.IsEnabled = true;
+                this.GuessAge.IsEnabled = true;
+                this.Clear.IsEnabled = true;
 
                 this.ClearVisualization();
                 //this.rootPage.NotifyUser("Opening...", NotifyType.StatusMessage);
