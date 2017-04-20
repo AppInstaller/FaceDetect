@@ -12,11 +12,15 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Core;
 using Windows.Graphics.Imaging;
 using Windows.Media.FaceAnalysis;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -30,7 +34,12 @@ namespace PhotoEditor
     /// Page for demonstrating FaceDetection on an image file.
     /// </summary>
     public sealed partial class MainPage : Page
-    {        
+    {
+
+        #region Globals
+
+        private PackageCatalog packageCatalog;
+
         /// <summary>
         /// Brush for drawing the bounding box around each detected face.
         /// </summary>
@@ -63,6 +72,8 @@ namespace PhotoEditor
         /// </remarks>
         private readonly uint sourceImageHeightLimit = 1280;
 
+        #endregion
+
         /// <summary>
         /// Reference back to the "root" page of the app.
         /// </summary>
@@ -74,16 +85,58 @@ namespace PhotoEditor
         public MainPage()
         {
             this.InitializeComponent();
+            Loaded += new RoutedEventHandler(page_Loaded);
         }
 
-        /// <summary>
-        /// Responds when we navigate to this page.
-        /// </summary>
-        /// <param name="e">Event data</param>
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    this.rootPage = MainPage.Current;
-        //}
+        public void page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var currentAppPackage = Windows.ApplicationModel.Package.Current;
+            foreach (var package in currentAppPackage.Dependencies)
+            {
+                if (package.IsOptional && package.Id.FamilyName.Contains("FabrikamFaceFilters"))
+                {
+                    FilterStackPanel.Visibility = Visibility.Visible;
+                }
+                else if(package.IsOptional && package.Id.FamilyName.Contains("FabrikamAgeAnalysis"))
+                {
+                    UtilityStackPanel.Visibility = Visibility.Visible;
+                }
+            }
+
+            try
+            {
+                packageCatalog = PackageCatalog.OpenForCurrentPackage();
+                packageCatalog.PackageInstalling += Catalog_PackageInstalling;
+            }
+            catch (Exception ex)
+            {
+                PopupUI("Unable to setup deployment event handlers. {" + ex.InnerException + "}");
+            }
+        }
+
+        private void Catalog_PackageInstalling(PackageCatalog sender, PackageInstallingEventArgs args)
+        {
+            if (args.Progress == 100 && args.IsComplete
+                && args.Package.IsOptional && args.Package.Id.FamilyName.Contains("FabrikamFaceFilters"))
+            {
+                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    FilterStackPanel.Visibility = Visibility.Visible;
+                });
+                
+            }
+            else if ((args.Progress == 100 && args.IsComplete
+                && args.Package.IsOptional && args.Package.Id.FamilyName.Contains("FabrikamAgeAnalysis")))
+            {
+                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+               () =>
+               {
+                   UtilityStackPanel.Visibility = Visibility.Visible;
+               });
+                
+            }
+        }        
 
         /// <summary>
         /// Takes the photo image and FaceDetector results and assembles the visualization onto the Canvas.
@@ -325,7 +378,7 @@ namespace PhotoEditor
             {
                 //this.rootPage.NotifyUser(ex.ToString(), NotifyType.ErrorMessage);
             }
-        }
+        }     
 
         private async void AddGlasses_Click(object sender, RoutedEventArgs e)
         {
@@ -387,11 +440,16 @@ namespace PhotoEditor
                     }
                     catch (Exception ex)
                     {
-                        // Exception thrown while loading code
+                        PopupUI("Failed to load dll. {" + ex.InnerException + "}");
                     }
                 }
             }
             return age;
+        }
+
+        private async void PopupUI(string text)
+        {
+            await new MessageDialog(text).ShowAsync();
         }
 
         #region Interop

@@ -7,48 +7,46 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid x:Name="RootGrid" Margin="12,20,12,12">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/Background.png"/>
+        </Grid.Background>
+        <Grid x:Name="RootGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Margin="0,0,0,10" HorizontalAlignment="Left">
-                <TextBlock>Filters</TextBlock>
+            <StackPanel x:Name="FilterStackPanel" Margin="0,0,0,0" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1" Visibility="Collapsed">
+                <TextBlock Text="Filters" Foreground="White" FontSize="26" HorizontalAlignment="Center"/>
                 <Button Name="AddFilter" Click="AddGlasses_Click">
                     <StackPanel>
-                        <Image Source="Assets\glasses.png" MaxHeight="50" MaxWidth="100" Stretch="Fill"/>
+                        <Image Source="Assets\glasses.png" MaxHeight="100" MaxWidth="150" Stretch="Fill"/>
                     </StackPanel>
                 </Button>
                 <Button Name="AddMush" Click="AddMush_Click">
                     <StackPanel>
-                        <Image Source="Assets\moustache.png" MaxHeight="50" MaxWidth="100" Stretch="Fill"/>
+                        <Image Source="Assets\moustache.png" MaxHeight="100" MaxWidth="150" Stretch="Fill"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
 
-            <StackPanel Margin="0,0,0,10" HorizontalAlignment="Right">
-                <TextBlock>Utilities</TextBlock>
-                <Button Name="GuessAge" Content="GuessAge" Click="GuessAge_Click" MaxHeight="50" MaxWidth="100" />
+            <StackPanel x:Name="UtilityStackPanel" Margin="0,330,0,0" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1" >
+                <TextBlock Text="Utilities" Foreground="White" FontSize="26" HorizontalAlignment="Center"/>
+                <Button Name="GuessAge" Content="Guess age from photo" Click="GuessAge_Click" FontSize="16" Foreground="White"/>
             </StackPanel>
 
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <Button Name="OpenFile" Content="Open" Click="OpenFile_Click" Margin="0,0,240,0" FontSize="30" Grid.Row="0" Grid.Column="0" Foreground="White" HorizontalAlignment="Center" />
+            <Button Name="Clear" Content="Clear" Click="Clear_Click" Margin="240,0,0,0" FontSize="30" Grid.Row="0" Grid.Column="0" Foreground="White" HorizontalAlignment="Center"/>
 
-                <Button Name="OpenFile" Grid.Row="0" Grid.Column="0" Content="Open image file" Click="OpenFile_Click"/>
-                <Button Name="Clear" Content="Clear" Click="Clear_Click" MaxHeight="50" MaxWidth="100" Margin="272,0,0,0" />
-                <Canvas Name="PhotoCanvas" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" SizeChanged="PhotoCanvas_SizeChanged"/>
-            </Grid>
+            <Canvas Name="PhotoCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10" SizeChanged="PhotoCanvas_SizeChanged" Grid.Row="1" Grid.Column="0" />
 
-            <!-- Status Block for providing messages to the user.  Use the
-             NotifyUser() method to populate the message -->
-            <Border x:Name="ErrorBorder" Background="Red" Grid.Row="2"/>
-            <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>
         </Grid>
     </Grid>
 </Page>
