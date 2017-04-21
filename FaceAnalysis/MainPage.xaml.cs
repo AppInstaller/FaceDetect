@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation;
 using Windows.Graphics.Imaging;
 using Windows.Media.FaceAnalysis;
 using Windows.Storage;
@@ -21,6 +22,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -85,6 +87,9 @@ namespace PhotoEditor
         public MainPage()
         {
             this.InitializeComponent();
+            ApplicationView.PreferredLaunchViewSize = new Size(1400, 850);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
             Loaded += new RoutedEventHandler(page_Loaded);
         }
 
@@ -147,10 +152,8 @@ namespace PhotoEditor
         {
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = displaySource;
-            brush.Stretch = Stretch.Fill;
+            brush.Stretch = Stretch.Uniform;
             this.PhotoCanvas.Background = brush;
-
-            bool AgeAnalysis = true;
 
             if (foundFaces != null)
             {
@@ -426,21 +429,21 @@ namespace PhotoEditor
 
                         if (handle == IntPtr.Zero)
                         {
-                            //Optional Package failed to load
+                            PopupUI("Failed to load dll");
                         }
                         else
                         {
                             IntPtr FuncPTR = GetProcAddress(handle, OPT_PKG_LIB_GETAGE_EXPORT);
                             if (FuncPTR != IntPtr.Zero)
                             {
-                                CodeDelegate function = Marshal.GetDelegateForFunctionPointer<CodeDelegate>(FuncPTR);
-                                age = function();                                
+                                CodeDelegate ageFunction = Marshal.GetDelegateForFunctionPointer<CodeDelegate>(FuncPTR);
+                                age = ageFunction();                                
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        PopupUI("Failed to load dll. {" + ex.InnerException + "}");
+                        PopupUI("Exception thrown while loading code {" + ex.InnerException + "}");
                     }
                 }
             }
